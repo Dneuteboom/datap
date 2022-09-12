@@ -19,8 +19,8 @@ public class Main {
         ReizigerDAOPsql reizigerDao = new ReizigerDAOPsql(getConnection());
         AdresDAOPsql adresDao = new AdresDAOPsql(getConnection());
 
-//        testReizigerDAO(reizigerDao);
-        testAdresDAO(adresDao,reizigerDao);
+        testReizigerDAO(reizigerDao);
+//        testAdresDAO(adresDao,reizigerDao);
 
         closeConnection();
 
@@ -47,7 +47,7 @@ public class Main {
     private static void testReizigerDAO(ReizigerDAO rdao) throws SQLException {
         System.out.println("\n---------- Test ReizigerDAO -------------");
 
-        // Haal alle reizigers op uit de database
+//         Haal alle reizigers op uit de database
         List<Reiziger> reizigers = rdao.findAll();
         System.out.println("[Test] ReizigerDAO.findAll() geeft de volgende reizigers:");
         for (Reiziger r : reizigers) {
@@ -72,6 +72,9 @@ public class Main {
         System.out.println("[test] reiziger die gedelete gaat worden: " + rdao.findById(77) +"\n");
         rdao.delete(sietske);
         System.out.println("[test] reiziger gevonden na delete: " +rdao.findById(77) + "\n");
+
+        // extra read test
+
 
     }
 

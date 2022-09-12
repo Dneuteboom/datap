@@ -1,6 +1,9 @@
 package DAOPsql;
 
+import Classes.OVChipkaart;
 import Classes.Reiziger;
+import DAO.AdresDAO;
+import DAO.OVChipkaartDAO;
 import DAO.ReizigerDAO;
 
 import java.sql.*;
@@ -10,10 +13,28 @@ import java.util.List;
 public class ReizigerDAOPsql implements ReizigerDAO {
 
     private Connection connection;
+    private AdresDAO adao;
+    private OVChipkaartDAO ovdao;
 
     public ReizigerDAOPsql(Connection connection) {
 
         this.connection = connection;
+    }
+
+    public OVChipkaartDAO getOvdao() {
+        return ovdao;
+    }
+
+    public void setOvdao(OVChipkaartDAO ovdao) {
+        this.ovdao = ovdao;
+    }
+
+    public AdresDAO getAdao() {
+        return adao;
+    }
+
+    public void setAdao(AdresDAO adao) {
+        this.adao = adao;
     }
 
 
@@ -33,8 +54,19 @@ public class ReizigerDAOPsql implements ReizigerDAO {
 
             prepstate.executeUpdate();
 
-            prepstate.close();
+            if(reiziger.getReizigerAdres() != null){
+                adao.save(reiziger.getReizigerAdres());
+            }
 
+            ArrayList<OVChipkaart> Kaarten = reiziger.getOvchipkaarten();
+            for(OVChipkaart ovchipkaart : Kaarten){
+                if(Kaarten.size() != 0) {
+                    ovdao.save(ovchipkaart);
+                }
+            }
+
+            prepstate.close();
+            return true;
 
         } catch (SQLException e) {
             System.out.println("fout in sql statement 'save' reiziger");
@@ -44,7 +76,6 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             System.out.println(e.getMessage());
             return false;
         }
-        return true;
     }
 
     @Override
@@ -62,7 +93,19 @@ public class ReizigerDAOPsql implements ReizigerDAO {
 
             prepstate.executeUpdate();
 
+
+            if(adao.findByReiziger(reiziger) != null) adao.update(reiziger.getReizigerAdres());
+            else adao.save(reiziger.getReizigerAdres());
+
+
+            if(reiziger.getOvchipkaarten().size() >= 1) {
+                for (OVChipkaart ovc : reiziger.getOvchipkaarten()) {
+                    ovdao.update(ovc);
+                }
+            }
+
             prepstate.close();
+            return true;
 
         }catch(SQLException e){
             System.out.println("fout in sql code 'update' reiziger");
@@ -72,8 +115,6 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             System.out.println(e.getMessage());
             return false;
         }
-
-        return true;
     }
 
     @Override
@@ -85,7 +126,16 @@ public class ReizigerDAOPsql implements ReizigerDAO {
 
             prepstate.executeUpdate();
 
+            if(reiziger.getReizigerAdres() != null)adao.delete(reiziger.getReizigerAdres());
+
+            if (reiziger.getOvchipkaarten().size() >= 1) {
+                for(OVChipkaart ovc : reiziger.getOvchipkaarten()){
+                    ovdao.delete(ovc);
+                }
+            }
+
             prepstate.close();
+            return true;
 
         }catch (SQLException e){
             System.out.println("fout in sql code 'delete' reiziger ");
@@ -95,7 +145,6 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             System.out.println(e.getMessage());
             return false;
         }
-        return true;
     }
 
     @Override
@@ -117,6 +166,12 @@ public class ReizigerDAOPsql implements ReizigerDAO {
                     resultSet.getString(4),
                     resultSet.getDate(5)
                 );
+
+                reiziger.setReizigerAdres(adao.findByReiziger(reiziger));
+
+                for(OVChipkaart ovChipkaart : ovdao.findByReiziger(reiziger)){
+                    reiziger.addOVChipkaart(ovChipkaart);
+                }
             }
 
             resultSet.close();
@@ -152,6 +207,12 @@ public class ReizigerDAOPsql implements ReizigerDAO {
                         resultSet.getString(4),
                         resultSet.getDate(5)
                 );
+                reiziger.setReizigerAdres(adao.findByReiziger(reiziger));
+
+                for(OVChipkaart ovChipkaart : ovdao.findByReiziger(reiziger)){
+                    reiziger.addOVChipkaart(ovChipkaart);
+                }
+
                 reizigers.add(reiziger);
             }
             prepstate.close();
@@ -188,8 +249,12 @@ public class ReizigerDAOPsql implements ReizigerDAO {
                         resultSet.getString(4),
                         resultSet.getDate(5)
                 );
+//                reiziger.setReizigerAdres(adao.findByReiziger(reiziger));
+//                reiziger.setOvchipkaarten((ArrayList<OVChipkaart>) ovdao.findByReiziger(reiziger));
                 reizigers.add(reiziger);
             }
+
+
             prepstate.close();
             resultSet.close();
 
