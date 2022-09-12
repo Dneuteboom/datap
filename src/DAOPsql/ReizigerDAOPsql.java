@@ -249,8 +249,6 @@ public class ReizigerDAOPsql implements ReizigerDAO {
                         resultSet.getString(4),
                         resultSet.getDate(5)
                 );
-//                reiziger.setReizigerAdres(adao.findByReiziger(reiziger));
-//                reiziger.setOvchipkaarten((ArrayList<OVChipkaart>) ovdao.findByReiziger(reiziger));
                 reizigers.add(reiziger);
             }
 
