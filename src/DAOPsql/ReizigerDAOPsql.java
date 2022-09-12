@@ -1,8 +1,6 @@
 package DAOPsql;
 
 import Classes.Reiziger;
-import DAO.AdresDAO;
-import DAO.OVChipkaartDAO;
 import DAO.ReizigerDAO;
 
 import java.sql.*;
@@ -11,19 +9,19 @@ import java.util.List;
 
 public class ReizigerDAOPsql implements ReizigerDAO {
 
-    private Connection connection;
-    private AdresDAO adao;
-    private OVChipkaartDAO ovdao;
+    private static Connection connection;
 
-    public ReizigerDAOPsql(Connection connection) {
-
+    public ReizigerDAOPsql(Connection connection) throws SQLException {
         this.connection = connection;
     }
-    public AdresDAO getAdao() {
-        return adao;
+    public static Connection getConnection() throws SQLException {
+        connection = DriverManager.getConnection
+                ("jdbc:postgresql://localhost:5432/ovchip?user=postgres&password=test");
+        System.out.println("connecting to database in reizigerdaosql");
+        return connection;
     }
 
-
+    AdresDAOPsql adao = new AdresDAOPsql(getConnection());
 
 
     @Override
@@ -85,22 +83,15 @@ public class ReizigerDAOPsql implements ReizigerDAO {
 
     @Override
     public boolean delete(Reiziger reiziger) {
+
         try {
+            if (adao.findByReiziger(reiziger) != null)adao.delete(adao.findByReiziger(reiziger));
+
             String sql = "delete from reiziger where reiziger_id =?";
             PreparedStatement prepstate = connection.prepareStatement(sql);
             prepstate.setInt(1,reiziger.getId());
 
-
-            int id = reiziger.getId();
-//            Adres adres = adao.findByReiziger(reiziger);
-//            int reizigerid = adres.getReiziger_id();
-//            System.out.println(adres + " is het id");
-            System.out.println(id + "is id");
-//            System.out.println(reizigerid + "is reizigerid");
-//            if(reiziger.getReizigerAdres() != null){adao.delete(adao.findByReiziger(reiziger));}
-
             prepstate.executeUpdate();
-
 
 
 
