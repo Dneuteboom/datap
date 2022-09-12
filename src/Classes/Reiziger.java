@@ -1,7 +1,6 @@
 package Classes;
 
 import java.sql.Date;
-import java.util.ArrayList;
 
 public class Reiziger {
 
@@ -10,9 +9,8 @@ public class Reiziger {
     private String tussenvoegsel;
     private String achternaam;
     private Date geboortedatum;
-
     private Adres reizigerAdres;
-    private ArrayList<OVChipkaart> ovKaarten = new ArrayList<>();
+
 
 
     public Reiziger(int id, String voorletters, String tussenvoegsel, String achternaam, Date geboortedatum) {
@@ -72,19 +70,6 @@ public class Reiziger {
     }
 
 
-    public void setOvchipkaarten(ArrayList<OVChipkaart> ovchipkaarten) {
-        this.ovKaarten = ovchipkaarten;
-    }
-
-    public ArrayList<OVChipkaart> getOvchipkaarten() {
-        return ovKaarten;
-    }
-
-    public void addOVChipkaart(OVChipkaart ovchipkaart) {
-        if (!ovKaarten.contains(ovchipkaart)) ovKaarten.add(ovchipkaart);
-    }
-
-
     @Override
     public String toString() {
         return "Reiziger{" +
@@ -93,8 +78,6 @@ public class Reiziger {
                 ", tussenvoegsel='" + tussenvoegsel + '\'' +
                 ", achternaam='" + achternaam + '\'' +
                 ", geboortedatum=" + geboortedatum +
-                ", reizigerAdres=" + reizigerAdres +
-                ", ovKaarten=" + ovKaarten +
                 '}';
     }
 }

@@ -67,6 +67,10 @@ public class Adres {
         return reiziger_id;
     }
 
+    public int getReiziger_id(int reiziger){
+        return reiziger_id;
+    }
+
     @Override
     public String toString() {
         return "Adres{" +
