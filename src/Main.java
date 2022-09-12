@@ -1,14 +1,15 @@
 import Classes.Adres;
+import Classes.OVChipkaart;
 import Classes.Reiziger;
 import DAO.AdresDAO;
 import DAO.ReizigerDAO;
 import DAOPsql.AdresDAOPsql;
+import DAOPsql.OVChipkaartDAOPsql;
 import DAOPsql.ReizigerDAOPsql;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.List;
 
 public class Main {
 
@@ -18,8 +19,9 @@ public class Main {
     public static void main(String[] args) throws SQLException {
         ReizigerDAOPsql reizigerDao = new ReizigerDAOPsql(getConnection());
         AdresDAOPsql adresDao = new AdresDAOPsql(getConnection());
+        OVChipkaartDAOPsql ovcDao = new OVChipkaartDAOPsql(getConnection());
 
-        testReizigerDAO(reizigerDao);
+        testReizigerDAO(reizigerDao,adresDao,ovcDao);
 //        testAdresDAO(adresDao,reizigerDao);
 
         closeConnection();
@@ -44,24 +46,39 @@ public class Main {
 
 
 
-    private static void testReizigerDAO(ReizigerDAO rdao) throws SQLException {
+    private static void testReizigerDAO(ReizigerDAO rdao, AdresDAOPsql adresDao, OVChipkaartDAOPsql ovcDao) throws SQLException {
         System.out.println("\n---------- Test ReizigerDAO -------------");
 
+        System.out.println("________[TEST CREATE FUNCTIES]_______");
+        String gbdatum = "2000-02-22";
+        Reiziger dummy = new Reiziger(6, "D", "Best", "Dummy", java.sql.Date.valueOf(gbdatum));
+        Adres adr = new Adres(6, "2000xp", "77", "Crash course", "Gouda", 6);
+        OVChipkaart ovchip = new OVChipkaart(9999,java.sql.Date.valueOf("2012-12-12"),1,67.22,6);
+//        System.out.println("saved?: "+ rdao.save(dummy));
+//        System.out.println("saved?: "+ adresDao.save(adr)+"\n");
+        System.out.println(ovchip);
+        System.out.println("saved?: " + ovcDao.save(ovchip));
+        dummy.setReizigerAdres(adr);
+        dummy.setOvchipkaart(ovchip);
+
+
+
+
 //         Haal alle reizigers op uit de database
-        List<Reiziger> reizigers = rdao.findAll();
-        System.out.println("[Test] ReizigerDAO.findAll() geeft de volgende reizigers:");
-        for (Reiziger r : reizigers) {
-            System.out.println(r);
-        }
-        System.out.println();
+//        List<Reiziger> reizigers = rdao.findAll();
+//        System.out.println("[Test] ReizigerDAO.findAll() geeft de volgende reizigers:");
+//        for (Reiziger r : reizigers) {
+//            System.out.println(r);
+//        }
+//        System.out.println();
 
         // Maak een nieuwe reiziger aan en persisteer deze in de database
-        String gbdatum = "1981-03-14";
-        Reiziger sietske = new Reiziger(77, "S", "", "Boers", java.sql.Date.valueOf(gbdatum));
-        System.out.print("[Test] Eerst " + reizigers.size() + " reizigers, na ReizigerDAO.save() ");
-        rdao.save(sietske);
-        reizigers = rdao.findAll();
-        System.out.println(reizigers.size() + " reizigers\n");
+//        String gbdatum = "1981-03-14";
+//        Reiziger sietske = new Reiziger(77, "S", "", "Boers", java.sql.Date.valueOf(gbdatum));
+//        System.out.print("[Test] Eerst " + reizigers.size() + " reizigers, na ReizigerDAO.save() ");
+//        rdao.save(sietske);
+//        reizigers = rdao.findAll();
+//        System.out.println(reizigers.size() + " reizigers\n");
 
         // voeg tussenvoegsel toe aan sietske
 //         sietske.setTussenvoegsel("test");
@@ -71,7 +88,7 @@ public class Main {
          //delete sietske uit de database
 
 //        System.out.println("[test] reiziger die gedelete gaat worden: " + rdao.findById(77) +"\n");
-          rdao.delete(rdao.findById(77));
+//          rdao.delete(rdao.findById(6));
 //        System.out.println("[test] reiziger gevonden na delete: " +rdao.findById(77) + "\n");
 
         // extra read test
@@ -91,6 +108,7 @@ public class Main {
         Adres adr = new Adres(6, "2000xp", "77", "Crash course", "Gouda", 6);
         System.out.println("saved?: "+ adao.save(adr)+"\n");
         dummy.setReizigerAdres(adr);
+
 
 
 //        Test de read functionaliteit

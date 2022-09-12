@@ -15,6 +15,9 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO{
 
     Connection connection;
 
+    public OVChipkaartDAOPsql(Connection connection) {
+    }
+
     @Override
     public boolean save(OVChipkaart ovChipkaart) {
         try{
@@ -24,7 +27,7 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO{
             prepstate.setInt(1, ovChipkaart.getKaartNummer());
             prepstate.setDate(2, ovChipkaart.getGeldigTot());
             prepstate.setInt(3, ovChipkaart.getKlasse());
-            prepstate.setFloat(4, ovChipkaart.getSaldo());
+            prepstate.setDouble(4, ovChipkaart.getSaldo());
             prepstate.setInt(5, ovChipkaart.getReizigerId());
 
             prepstate.executeUpdate();
@@ -50,7 +53,7 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO{
             PreparedStatement prepstate = connection.prepareStatement(sql);
             prepstate.setDate(1, ovChipkaart.getGeldigTot());
             prepstate.setInt(2, ovChipkaart.getKlasse());
-            prepstate.setFloat(3, ovChipkaart.getSaldo());
+            prepstate.setDouble(3, ovChipkaart.getSaldo());
             prepstate.setInt(4, ovChipkaart.getReizigerId());
             prepstate.setInt(5, ovChipkaart.getKaartNummer());
 
@@ -112,7 +115,7 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO{
                         resultSet.getInt(1),
                         resultSet.getDate(2),
                         resultSet.getInt(3),
-                        resultSet.getFloat(4),
+                        resultSet.getDouble(4),
                         resultSet.getInt(5)
                 );
                 kaarten.add(kaart);
@@ -148,7 +151,7 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO{
                         resultSet.getInt(1),
                         resultSet.getDate(2),
                         resultSet.getInt(3),
-                        resultSet.getFloat(4),
+                        resultSet.getDouble(4),
                         resultSet.getInt(5)
                 );
                 ovKaarten.add(ovkaart);

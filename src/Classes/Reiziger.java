@@ -10,6 +10,7 @@ public class Reiziger {
     private String achternaam;
     private Date geboortedatum;
     private Adres reizigerAdres;
+    private OVChipkaart ovchipkaart;
 
 
 
@@ -69,6 +70,13 @@ public class Reiziger {
         this.geboortedatum = geboortedatum;
     }
 
+    public OVChipkaart getOvchipkaart() {
+        return ovchipkaart;
+    }
+
+    public void setOvchipkaart(OVChipkaart ovchipkaart) {
+        this.ovchipkaart = ovchipkaart;
+    }
 
     @Override
     public String toString() {

@@ -8,11 +8,11 @@ public class OVChipkaart {
     private int kaartNummer;
     private Date geldigTot;
     private int klasse;
-    private float saldo;
+    private double saldo;
     private int reizigerId;
     private Reiziger reiziger;
 
-    public OVChipkaart(int kaartNummer, Date geldigTot, int klasse, float saldo, int reizigerId) {
+    public OVChipkaart(int kaartNummer, Date geldigTot, int klasse, double saldo, int reizigerId) {
         this.kaartNummer = kaartNummer;
         this.geldigTot = geldigTot;
         this.klasse = klasse;
@@ -45,11 +45,11 @@ public class OVChipkaart {
         this.klasse = klasse;
     }
 
-    public float getSaldo() {
+    public double getSaldo() {
         return saldo;
     }
 
-    public void setSaldo(float saldo) {
+    public void setSaldo(double saldo) {
         this.saldo = saldo;
     }
 

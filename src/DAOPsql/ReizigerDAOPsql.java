@@ -1,5 +1,6 @@
 package DAOPsql;
 
+import Classes.OVChipkaart;
 import Classes.Reiziger;
 import DAO.ReizigerDAO;
 
@@ -22,6 +23,7 @@ public class ReizigerDAOPsql implements ReizigerDAO {
     }
 
     AdresDAOPsql adao = new AdresDAOPsql(getConnection());
+    OVChipkaartDAOPsql ovcdao = new OVChipkaartDAOPsql(getConnection());
 
 
     @Override
@@ -85,7 +87,14 @@ public class ReizigerDAOPsql implements ReizigerDAO {
     public boolean delete(Reiziger reiziger) {
 
         try {
+
+            if (ovcdao.findByReiziger(reiziger) != null){
+                for (OVChipkaart ovchipkaart : ovcdao.findByReiziger(reiziger)){
+                    ovcdao.delete(ovchipkaart);
+                }
+            }
             if (adao.findByReiziger(reiziger) != null)adao.delete(adao.findByReiziger(reiziger));
+
 
             String sql = "delete from reiziger where reiziger_id =?";
             PreparedStatement prepstate = connection.prepareStatement(sql);
