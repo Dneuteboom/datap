@@ -1,7 +1,6 @@
 package Classes;
 
 public class Adres {
-
     private int adres_id;
     private String postcode;
     private String huisnummer;
@@ -34,50 +33,40 @@ public class Adres {
         return straat;
     }
 
-    public String getWoonplaats() {
-        return woonplaats;
-    }
-
-    public void setAdres_id(int adres_id) {
-        this.adres_id = adres_id;
-    }
-
-    public void setPostcode(String postcode) {
-        this.postcode = postcode;
-    }
-
-    public void setHuisnummer(String huisnummer) {
-        this.huisnummer = huisnummer;
-    }
-
     public void setStraat(String straat) {
         this.straat = straat;
     }
 
-    public void setWoonplaats(String woonplaats) {
-        this.woonplaats = woonplaats;
+    public String getWoonplaats() {
+        return woonplaats;
     }
-
-    public void setReiziger_id(int reiziger_id) {
-        this.reiziger_id = reiziger_id;
-    }
-
 
     public int getReiziger_id() {
         return reiziger_id;
     }
 
-    public int getReiziger_id(int reiziger){
-        return reiziger_id;
+    public void setReiziger_id(int reiziger_id) {
+        this.reiziger_id = reiziger_id;
     }
+    public void setAdres_id(int adres_id) {
+        this.adres_id = adres_id;
+    }
+    public void setWoonplaats(String woonplaats) {
+        this.woonplaats = woonplaats;
+    }
+    public void setHuisnummer(String huisnummer) {
+        this.huisnummer = huisnummer;
+    }
+    public void setPostcode(String postcode) {
+        this.postcode = postcode;
+    }
+
 
     @Override
     public String toString() {
         return "Adres{" +
                 "adres_id=" + adres_id +
-                ", postcode='" + postcode + '\'' +
                 ", huisnummer='" + huisnummer + '\'' +
-                ", straat='" + straat + '\'' +
                 ", woonplaats='" + woonplaats + '\'' +
                 ", reiziger_id=" + reiziger_id +
                 '}';

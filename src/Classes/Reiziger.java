@@ -1,37 +1,31 @@
 package Classes;
 
-import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class Reiziger {
-
-    private int id;
+    private int reiziger_id;
     private String voorletters;
     private String tussenvoegsel;
     private String achternaam;
     private Date geboortedatum;
     private Adres reizigerAdres;
-    private OVChipkaart ovchipkaart;
+    private ArrayList<OVChipkaart> ovchipkaarten = new ArrayList<>();
 
 
-
-    public Reiziger(int id, String voorletters, String tussenvoegsel, String achternaam, Date geboortedatum) {
-        this.id = id;
+    public Reiziger() {
+    }
+    public Reiziger(int reiziger_id, String voorletters, String tussenvoegsel, String achternaam, Date geboortedatum) {
+        this.reiziger_id = reiziger_id;
         this.voorletters = voorletters;
         this.tussenvoegsel = tussenvoegsel;
         this.achternaam = achternaam;
         this.geboortedatum = geboortedatum;
     }
 
-    public Adres getReizigerAdres() {
-        return reizigerAdres;
-    }
 
-    public void setReizigerAdres(Adres reizigerAdres) {
-        this.reizigerAdres = reizigerAdres;
-    }
-
-    public int getId() {
-        return id;
+    public int getReiziger_id() {
+        return reiziger_id;
     }
 
     public String getVoorletters() {
@@ -50,16 +44,30 @@ public class Reiziger {
         return geboortedatum;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setVoorletters(String voorletters) {
-        this.voorletters = voorletters;
-    }
 
     public void setTussenvoegsel(String tussenvoegsel) {
         this.tussenvoegsel = tussenvoegsel;
+    }
+
+    public void setAdres(Adres a) {
+        reizigerAdres = a;
+    }
+
+    public Adres getAdres() {
+        return reizigerAdres;
+    }
+
+    public void addOvchipkaart(OVChipkaart ovchipkaart) {
+        if (!ovchipkaarten.contains(ovchipkaart)) {
+            ovchipkaarten.add(ovchipkaart);
+        }
+    }
+    public ArrayList<OVChipkaart> getOvchipkaarten() {
+        return ovchipkaarten;
+    }
+
+    public void setOvchipkaarten(ArrayList<OVChipkaart> ovchipkaarten) {
+        this.ovchipkaarten = ovchipkaarten;
     }
 
     public void setAchternaam(String achternaam) {
@@ -70,22 +78,22 @@ public class Reiziger {
         this.geboortedatum = geboortedatum;
     }
 
-    public OVChipkaart getOvchipkaart() {
-        return ovchipkaart;
+    public void setReiziger_id(int reiziger_id) {
+        this.reiziger_id = reiziger_id;
     }
 
-    public void setOvchipkaart(OVChipkaart ovchipkaart) {
-        this.ovchipkaart = ovchipkaart;
+    public void setVoorletters(String voorletters) {
+        this.voorletters = voorletters;
     }
+
 
     @Override
     public String toString() {
         return "Reiziger{" +
-                "id=" + id +
+                "reiziger_id=" + reiziger_id +
                 ", voorletters='" + voorletters + '\'' +
-                ", tussenvoegsel='" + tussenvoegsel + '\'' +
                 ", achternaam='" + achternaam + '\'' +
-                ", geboortedatum=" + geboortedatum +
+                ", reizigerAdres=" + reizigerAdres +
                 '}';
     }
 }

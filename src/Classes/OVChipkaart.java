@@ -1,40 +1,30 @@
 package Classes;
 
-import java.sql.Date;
-
+import java.util.Date;
 
 public class OVChipkaart {
+    public int kaart_nummer;
+    public Date geldig_tot;
+    public int klasse;
+    public float saldo;
+    public int reiziger_id;
+    public Reiziger reiziger;
 
-    private int kaartNummer;
-    private Date geldigTot;
-    private int klasse;
-    private double saldo;
-    private int reizigerId;
-    private Reiziger reiziger;
 
-    public OVChipkaart(int kaartNummer, Date geldigTot, int klasse, double saldo, int reizigerId) {
-        this.kaartNummer = kaartNummer;
-        this.geldigTot = geldigTot;
+    public OVChipkaart(int kaart_nummer, Date geldig_tot, int klasse, float saldo, int reiziger_id) {
+        this.kaart_nummer = kaart_nummer;
+        this.geldig_tot = geldig_tot;
         this.klasse = klasse;
         this.saldo = saldo;
-        this.reizigerId = reizigerId;
+        this.reiziger_id = reiziger_id;
     }
 
-
-    public int getKaartNummer() {
-        return kaartNummer;
+    public int getKaart_nummer() {
+        return kaart_nummer;
     }
 
-    public void setKaartNummer(int kaartNummer) {
-        this.kaartNummer = kaartNummer;
-    }
-
-    public Date getGeldigTot() {
-        return geldigTot;
-    }
-
-    public void setGeldigTot(Date geldigTot) {
-        this.geldigTot = geldigTot;
+    public Date getGeldig_tot() {
+        return geldig_tot;
     }
 
     public int getKlasse() {
@@ -45,38 +35,42 @@ public class OVChipkaart {
         this.klasse = klasse;
     }
 
-    public double getSaldo() {
+    public float getSaldo() {
         return saldo;
     }
 
-    public void setSaldo(double saldo) {
-        this.saldo = saldo;
-    }
-
-    public int getReizigerId() {
-        return reizigerId;
-    }
-
-    public void setReizigerId(int reizigerId) {
-        this.reizigerId = reizigerId;
-    }
-
-    public Reiziger getReiziger() {
-        return reiziger;
+    public int getReiziger_id() {
+        return reiziger_id;
     }
 
     public void setReiziger(Reiziger reiziger) {
         this.reiziger = reiziger;
     }
 
+    public Reiziger getReiziger(){
+        return reiziger;
+    }
+    public void setKaart_nummer(int kaart_nummer) {
+        this.kaart_nummer = kaart_nummer;
+    }
+    public void setReiziger_id(int reiziger_id) {
+        this.reiziger_id = reiziger_id;
+    }
+    public void setSaldo(float saldo) {
+        this.saldo = saldo;
+    }
+    public void setGeldig_tot(Date geldig_tot) {
+        this.geldig_tot = geldig_tot;
+    }
+
+
     @Override
     public String toString() {
         return "OVChipkaart{" +
-                "kaartNummer=" + kaartNummer +
-                ", geldigTot=" + geldigTot +
+                "kaart_nummer=" + kaart_nummer +
                 ", klasse=" + klasse +
-                ", saldo=" + saldo +
-                ", reizigerId=" + reizigerId +
+                ", reiziger_id=" + reiziger_id +
+                ", reiziger=" + reiziger +
                 '}';
     }
 }

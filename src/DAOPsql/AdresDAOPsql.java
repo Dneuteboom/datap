@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdresDAOPsql implements AdresDAO {
-
     private Connection connection;
 
     public AdresDAOPsql(Connection connection) {
@@ -34,8 +33,8 @@ public class AdresDAOPsql implements AdresDAO {
             prepstate.executeUpdate();
 
             prepstate.close();
-            return true;
 
+            return true;
         }catch (SQLException e){
             System.out.println("Fout in sql 'save' adres");
             System.out.println(e.getMessage());
@@ -49,21 +48,19 @@ public class AdresDAOPsql implements AdresDAO {
 
     @Override
     public boolean update(Adres adres) {
-        try {
-            String sql = "update adres set postcode =?, huisnummer=?, straat=?, woonplaats=?, reiziger_id=? " +
+        try{
+            String query = "update adres set postcode = ?, huisnummer = ?, straat = ?, woonplaats = ?" +
                     "where adres_id = ?";
-
-            PreparedStatement prepstate = connection.prepareStatement(sql);
+            PreparedStatement prepstate = connection.prepareStatement(query);
             prepstate.setString(1, adres.getPostcode());
             prepstate.setString(2, adres.getHuisnummer());
             prepstate.setString(3, adres.getStraat());
             prepstate.setString(4, adres.getWoonplaats());
-            prepstate.setInt(5,adres.getReiziger_id());
-            prepstate.setInt(6,adres.getAdres_id());
-
+            prepstate.setInt(5, adres.getAdres_id());
             prepstate.executeUpdate();
-
             prepstate.close();
+
+            return true;
 
         }catch (SQLException e){
             System.out.println("fout in sql code 'update' adres");
@@ -73,20 +70,18 @@ public class AdresDAOPsql implements AdresDAO {
             System.out.println(e.getMessage());
             return false;
         }
-
-
-        return true;
     }
 
     @Override
     public boolean delete(Adres adres) {
-        try {
-            String sql = "delete from adres where adres_id =? ";
-            PreparedStatement prepstate = connection.prepareStatement(sql);
-            prepstate.setInt(1,adres.getAdres_id());
+        try{
+            String query = "delete from adres where adres_id = ? ";
+            PreparedStatement prepstate = connection.prepareStatement(query);
+            prepstate.setInt(1, adres.getAdres_id());
             prepstate.executeUpdate();
-
             prepstate.close();
+
+            return true;
 
         }catch (SQLException e){
             System.out.println("fout in sql code 'delete' adres");
@@ -96,39 +91,31 @@ public class AdresDAOPsql implements AdresDAO {
             System.out.println(e.getMessage());
             return false;
         }
-
-
-        return true;
     }
-
-
-
 
     @Override
     public Adres findByReiziger(Reiziger reiziger) {
         try {
-            String sql = "select * from adres where reiziger_id =?";
-            PreparedStatement prepstate = connection.prepareStatement(sql);
-            prepstate.setInt(1, reiziger.getId());
+            String query = "select * from adres where reiziger_id = ?";
+            PreparedStatement prepstate = connection.prepareStatement(query);
+            prepstate.setInt(1, reiziger.getReiziger_id());
+            ResultSet resultset = prepstate.executeQuery();
 
-            ResultSet resultSet = prepstate.executeQuery();
+            Adres reizigerAdres = null;
+            while(resultset.next()){
+                reizigerAdres = new Adres(
+                        resultset.getInt(1),
+                        resultset.getString(2),
+                        resultset.getString(3),
+                        resultset.getString(4),
+                        resultset.getString(5),
+                        resultset.getInt(6));
 
-            Adres adres = null;
-
-            while (resultSet.next()) {
-                adres = new Adres(
-                        resultSet.getInt(1),
-                        resultSet.getString(2),
-                        resultSet.getString(3),
-                        resultSet.getString(4),
-                        resultSet.getString(5),
-                        resultSet.getInt(6));
             }
-
+            resultset.close();
             prepstate.close();
-            resultSet.close();
 
-            return adres;
+            return reizigerAdres;
 
         }catch (SQLException e){
             System.out.println("fout in sql code 'findByReiziger' adres");
@@ -136,35 +123,27 @@ public class AdresDAOPsql implements AdresDAO {
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
-
         return null;
     }
 
+
     @Override
     public List<Adres> findAll() {
-        List <Adres> adressen = new ArrayList<>();
-
-        try {
-            String sql = "select * from adres";
-            PreparedStatement prepstate = connection.prepareStatement(sql);
-
-            ResultSet resultSet = prepstate.executeQuery();
-
-            while(resultSet.next()){
-                Adres adres = new Adres(
-                        resultSet.getInt(1),
-                        resultSet.getString(2),
-                        resultSet.getString(3),
-                        resultSet.getString(4),
-                        resultSet.getString(5),
-                        resultSet.getInt(6));
-
-                        adressen.add(adres);
+        List<Adres> adressen = new ArrayList<>();
+        try{
+            String query = "select * from adres";
+            PreparedStatement prepstate = connection.prepareStatement(query);
+            ResultSet resultset = prepstate.executeQuery();
+            while(resultset.next()){
+                adressen.add(new Adres(resultset.getInt(1),
+                        resultset.getString(2),
+                        resultset.getString(3),
+                        resultset.getString(4),
+                        resultset.getString(5),
+                        resultset.getInt(6)));
             }
-
+            resultset.close();
             prepstate.close();
-            resultSet.close();
-
             return adressen;
 
         }catch (SQLException e){

@@ -2,15 +2,14 @@ package DAO;
 
 import Classes.Reiziger;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface ReizigerDAO {
-
-    public boolean save(Reiziger reiziger);
-    public boolean update(Reiziger reiziger);
-    public boolean delete(Reiziger reiziger);
-    public Reiziger findById(int id);
-    public List<Reiziger> findByGbdatum(String datum);
-    public List<Reiziger> findAll();
-
+    boolean save(Reiziger reiziger) throws SQLException;
+    boolean update(Reiziger reiziger)throws SQLException;
+    boolean delete(Reiziger reiziger) throws SQLException;
+    Reiziger findById(int id)throws SQLException;
+    List<Reiziger> findByGbDatum(String datum)throws SQLException;
+    List<Reiziger> findAll()throws SQLException;
 }

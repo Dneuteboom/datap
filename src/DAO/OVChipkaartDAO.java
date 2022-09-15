@@ -6,11 +6,9 @@ import Classes.Reiziger;
 import java.util.List;
 
 public interface OVChipkaartDAO {
-
-    public boolean save(OVChipkaart ovChipkaart);
-    public boolean update(OVChipkaart ovChipkaart);
-    public boolean delete(OVChipkaart ovChipkaart);
+    public boolean save(OVChipkaart ovchipkaart);
+    public boolean update(OVChipkaart ovchipkaart);
+    public boolean delete(OVChipkaart ovchipkaart);
     public List<OVChipkaart> findByReiziger(Reiziger reiziger);
     public List<OVChipkaart> findAll();
-
 }

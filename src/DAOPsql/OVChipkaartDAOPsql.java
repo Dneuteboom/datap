@@ -3,6 +3,7 @@ package DAOPsql;
 import Classes.OVChipkaart;
 import Classes.Reiziger;
 import DAO.OVChipkaartDAO;
+import DAO.ReizigerDAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,29 +12,38 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OVChipkaartDAOPsql implements OVChipkaartDAO{
+public class OVChipkaartDAOPsql implements OVChipkaartDAO {
+    private Connection connection;
+    private ReizigerDAO rdao;
 
-    Connection connection;
 
     public OVChipkaartDAOPsql(Connection connection) {
+        this.connection = connection;
     }
 
-    @Override
-    public boolean save(OVChipkaart ovChipkaart) {
-        try{
-            String sql = "insert into ov_chipkaart (kaart_nummer, geldig_tot, klasse, saldo, reiziger_id)" +
-                    "Values (?,?,?,?,?)";
-            PreparedStatement prepstate = connection.prepareStatement(sql);
-            prepstate.setInt(1, ovChipkaart.getKaartNummer());
-            prepstate.setDate(2, ovChipkaart.getGeldigTot());
-            prepstate.setInt(3, ovChipkaart.getKlasse());
-            prepstate.setDouble(4, ovChipkaart.getSaldo());
-            prepstate.setInt(5, ovChipkaart.getReizigerId());
+    public void setRdao(ReizigerDAO rdao) {
+        this.rdao = rdao;
+    }
 
+
+    @Override
+    public boolean save(OVChipkaart ovchipkaart){
+        try{
+            String query = "insert into ov_chipkaart(kaart_nummer, geldig_tot, klasse, saldo, reiziger_id) " +
+                    "values(?,?,?,?,?)";
+            PreparedStatement prepstate = connection.prepareStatement(query);
+            prepstate.setInt(1, ovchipkaart.getKaart_nummer());
+            prepstate.setDate(2, (java.sql.Date) ovchipkaart.getGeldig_tot());
+            prepstate.setInt(3, ovchipkaart.getKlasse());
+            prepstate.setFloat(4, ovchipkaart.getSaldo());
+            prepstate.setInt(5, ovchipkaart.getReiziger_id());
             prepstate.executeUpdate();
 
+
             prepstate.close();
+
             return true;
+
 
         }catch (SQLException e){
             System.out.println("fout in sql 'save' ovchipkaart");
@@ -46,20 +56,22 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO{
     }
 
     @Override
-    public boolean update(OVChipkaart ovChipkaart) {
+    public boolean update(OVChipkaart ovchipkaart){
         try{
-            String sql = "update ov_chipkaart (geldig_tot =?, klasse=?, saldo=?, reiziger_id=?) " +
-                    "where kaart_nummer = ?";
-            PreparedStatement prepstate = connection.prepareStatement(sql);
-            prepstate.setDate(1, ovChipkaart.getGeldigTot());
-            prepstate.setInt(2, ovChipkaart.getKlasse());
-            prepstate.setDouble(3, ovChipkaart.getSaldo());
-            prepstate.setInt(4, ovChipkaart.getReizigerId());
-            prepstate.setInt(5, ovChipkaart.getKaartNummer());
 
+
+
+            String query = "update ov_chipkaart set geldig_tot = ?, klasse = ?, saldo = ?" +
+                    "where kaart_nummer = ?";
+            PreparedStatement prepstate = connection.prepareStatement(query);
+            prepstate.setDate(1, (java.sql.Date) ovchipkaart.getGeldig_tot());
+            prepstate.setInt(2, ovchipkaart.getKlasse());
+            prepstate.setFloat(3, ovchipkaart.getSaldo());
+            prepstate.setInt(4, ovchipkaart.getKaart_nummer());
             prepstate.executeUpdate();
 
             prepstate.close();
+
             return true;
 
         }catch (SQLException e){
@@ -74,58 +86,50 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO{
     }
 
     @Override
-    public boolean delete(OVChipkaart ovChipkaart) {
-        try{
-            String sql = "delete from ov_chipkaart where kaart_nummer =?";
-            PreparedStatement prepstate = connection.prepareStatement(sql);
-            prepstate.setInt(1,ovChipkaart.getKaartNummer());
+    public boolean delete(OVChipkaart ovchipkaart) {
+        try {
 
+
+            String query = "delete from ov_chipkaart where kaart_nummer = ? ";
+            PreparedStatement prepstate = connection.prepareStatement(query);
+            prepstate.setInt(1, ovchipkaart.getKaart_nummer());
             prepstate.executeUpdate();
 
             prepstate.close();
 
             return true;
 
-
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("fout in sql 'delete' ovchipkaart");
             System.out.println(e.getMessage());
             return false;
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             return false;
         }
     }
 
+
     @Override
-    public List<OVChipkaart> findByReiziger(Reiziger reiziger) {
+    public List<OVChipkaart> findByReiziger(Reiziger reiziger){
         List<OVChipkaart> kaarten = new ArrayList<>();
-
         try {
-            String sql = "select reiziger from ov_chipkaart where kaart_nummer =?";
-            PreparedStatement prepstate = connection.prepareStatement(sql);
-            prepstate.setInt(1,reiziger.getId());
-
-            ResultSet resultSet = prepstate.executeQuery();
-
-
-
-            while (resultSet.next()){
-                OVChipkaart kaart = new OVChipkaart(
-                        resultSet.getInt(1),
-                        resultSet.getDate(2),
-                        resultSet.getInt(3),
-                        resultSet.getDouble(4),
-                        resultSet.getInt(5)
-                );
-                kaarten.add(kaart);
+            String query = "select * from ov_chipkaart where reiziger_id = ? ";
+            PreparedStatement prepstate = connection.prepareStatement(query);
+            prepstate.setInt(1, reiziger.getReiziger_id());
+            ResultSet resultset = prepstate.executeQuery();
+            while(resultset.next()) {
+                OVChipkaart ovc = new OVChipkaart(
+                        resultset.getInt(1),
+                        resultset.getDate(2),
+                        resultset.getInt(3),
+                        resultset.getFloat(4),
+                        resultset.getInt(5));
+                ovc.setReiziger(reiziger);
+                kaarten.add(ovc);
             }
-
             prepstate.close();
-            resultSet.close();
-
             return kaarten;
-
 
         }catch (SQLException e){
             System.out.println("fout in sql 'findByReiziger' ovchipkaart");
@@ -136,29 +140,28 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO{
         return null;
     }
 
+
+
     @Override
-    public List<OVChipkaart> findAll() {
+    public List<OVChipkaart> findAll(){
         List<OVChipkaart> ovKaarten = new ArrayList<>();
-
         try{
-            String sql = "select * from ov_chipkaart";
-            PreparedStatement prepstate = connection.prepareStatement(sql);
-
-            ResultSet resultSet = prepstate.executeQuery();
-
-            while (resultSet.next()){
-                OVChipkaart ovkaart = new OVChipkaart(
-                        resultSet.getInt(1),
-                        resultSet.getDate(2),
-                        resultSet.getInt(3),
-                        resultSet.getDouble(4),
-                        resultSet.getInt(5)
-                );
-                ovKaarten.add(ovkaart);
+            String query = "select * from ov_chipkaart";
+            PreparedStatement prepstate = connection.prepareStatement(query);
+            ResultSet resultset = prepstate.executeQuery();
+            while(resultset.next()){
+                OVChipkaart ovc = new OVChipkaart(
+                        resultset.getInt(1),
+                        resultset.getDate(2),
+                        resultset.getInt(3),
+                        resultset.getFloat(4),
+                        resultset.getInt(5));
+                ovc.setReiziger(rdao.findById(resultset.getInt(5)));
+                ovKaarten.add(ovc);
             }
 
+            resultset.close();
             prepstate.close();
-            resultSet.close();
 
             return ovKaarten;
 
@@ -169,9 +172,8 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO{
 
         }catch (Exception e){
             System.out.println(e.getMessage());
-    }
+        }
 
         return null;
     }
-
 }
