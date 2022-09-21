@@ -3,6 +3,7 @@ package DAOPsql;
 import Classes.Adres;
 import Classes.Reiziger;
 import DAO.AdresDAO;
+import DAO.ReizigerDAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,9 +14,15 @@ import java.util.List;
 
 public class AdresDAOPsql implements AdresDAO {
     private Connection connection;
+    private ReizigerDAO rdao;
+
 
     public AdresDAOPsql(Connection connection) {
         this.connection = connection;
+    }
+
+    public void setRdao(ReizigerDAO rdao) {
+        this.rdao = rdao;
     }
 
     @Override
@@ -110,7 +117,6 @@ public class AdresDAOPsql implements AdresDAO {
                         resultset.getString(4),
                         resultset.getString(5),
                         resultset.getInt(6));
-
             }
             resultset.close();
             prepstate.close();
@@ -135,12 +141,15 @@ public class AdresDAOPsql implements AdresDAO {
             PreparedStatement prepstate = connection.prepareStatement(query);
             ResultSet resultset = prepstate.executeQuery();
             while(resultset.next()){
-                adressen.add(new Adres(resultset.getInt(1),
+                Adres adres = new Adres(resultset.getInt(1),
                         resultset.getString(2),
                         resultset.getString(3),
                         resultset.getString(4),
                         resultset.getString(5),
-                        resultset.getInt(6)));
+                        resultset.getInt(6));
+
+               adres.setReiziger(rdao.findById(resultset.getInt(6)));
+                adressen.add(adres);
             }
             resultset.close();
             prepstate.close();

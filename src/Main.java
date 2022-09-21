@@ -24,12 +24,13 @@ public class Main {
 
         reizigerDao.setAdao(adresDao);
         reizigerDao.setOvdao(ovcDAO);
+        adresDao.setRdao(reizigerDao);
         ovcDAO.setRdao(reizigerDao);
 
 
 
 //        testReizigerDAO(reizigerDao);
-//        testAdresDAO(adresDao,reizigerDao);
+        testAdresDAO(adresDao,reizigerDao);
 //        testOVChipkaartDAO(ovcDAO, reizigerDao);
 
         closeConnection();
@@ -92,26 +93,29 @@ public class Main {
 
         System.out.println("\n---------- Test AdresDAO -------------");
 
+        //        Test de read functionaliteit
+        List<Adres> adressen = adao.findAll();
+        System.out.println("[Test] ADRESDAO.findall() geeft de volgende adressen:");
+        for (Adres a : adressen) {
+            System.out.println(a);
+        }
+        System.out.println();
+
+
 //        Test de create functionaliteit
         System.out.println("________[TEST CREATE FUNCTIES]_______");
         String gbdatum = "2000-02-22";
         Reiziger dummy = new Reiziger(6, "D", "Best", "Dummy", java.sql.Date.valueOf(gbdatum));
+
         System.out.println("saved?: " + rdao.save(dummy));
         Adres adr = new Adres(6, "2000xp", "77", "Crash course", "Gouda", 6);
+
         System.out.println("saved?: " + adao.save(adr) + "\n");
         dummy.setAdres(adr);
 
 
-//        Test de read functionaliteit
-        System.out.println("________[TEST READ FUNCTIES]_______");
-        List<Adres> adressen = adao.findAll();
-        for (Adres a : adressen) {
-            System.out.println(a);
-        }
-        System.out.println("\n" + adao.findByReiziger(rdao.findById(6)) + "\n");
-
 //        Test de update functionaliteit
-//        System.out.println("________[TEST UPDATE FUNCTIES]_______");
+        System.out.println("________[TEST UPDATE FUNCTIES]_______");
         adr.setStraat("testy testers ");
         System.out.println("Update gelukt?: " + adao.update(adr) + "\n");
 

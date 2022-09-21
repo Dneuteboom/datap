@@ -156,6 +156,7 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
                         resultset.getInt(3),
                         resultset.getFloat(4),
                         resultset.getInt(5));
+
                 ovc.setReiziger(rdao.findById(resultset.getInt(5)));
                 ovKaarten.add(ovc);
             }

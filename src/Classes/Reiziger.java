@@ -62,6 +62,9 @@ public class Reiziger {
             ovchipkaarten.add(ovchipkaart);
         }
     }
+    public void deleteOvchipkaart(OVChipkaart ovchipkaart) {
+        ovchipkaarten.remove(ovchipkaart);
+    }
     public ArrayList<OVChipkaart> getOvchipkaarten() {
         return ovchipkaarten;
     }
